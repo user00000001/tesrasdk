@@ -29,7 +29,7 @@ import (
 	"github.com/TesraSupernet/Tesra/core/types"
 	cutils "github.com/TesraSupernet/Tesra/core/utils"
 	"github.com/TesraSupernet/Tesra/smartcontract/service/native/global_params"
-	"github.com/TesraSupernet/Tesra/smartcontract/service/native/tesra"
+	"github.com/TesraSupernet/Tesra/smartcontract/service/native/tsr"
 )
 
 var (
@@ -141,12 +141,12 @@ type Tesra struct {
 }
 
 func (this *Tesra) NewTransferTransaction(gasPrice, gasLimit uint64, from, to common.Address, amount uint64) (*types.MutableTransaction, error) {
-	state := &tesra.State{
+	state := &tsr.State{
 		From:  from,
 		To:    to,
 		Value: amount,
 	}
-	return this.NewMultiTransferTransaction(gasPrice, gasLimit, []*tesra.State{state})
+	return this.NewMultiTransferTransaction(gasPrice, gasLimit, []*tsr.State{state})
 }
 
 func (this *Tesra) Transfer(gasPrice, gasLimit uint64, payer *Account, from *Account, to common.Address, amount uint64) (common.Uint256, error) {
@@ -168,17 +168,17 @@ func (this *Tesra) Transfer(gasPrice, gasLimit uint64, payer *Account, from *Acc
 	return this.tesraSdk.SendTransaction(tx)
 }
 
-func (this *Tesra) NewMultiTransferTransaction(gasPrice, gasLimit uint64, states []*tesra.State) (*types.MutableTransaction, error) {
+func (this *Tesra) NewMultiTransferTransaction(gasPrice, gasLimit uint64, states []*tsr.State) (*types.MutableTransaction, error) {
 	return this.native.NewNativeInvokeTransaction(
 		gasPrice,
 		gasLimit,
 		TSR_CONTRACT_VERSION,
 		TSR_CONTRACT_ADDRESS,
-		tesra.TRANSFER_NAME,
+		tsr.TRANSFER_NAME,
 		[]interface{}{states})
 }
 
-func (this *Tesra) MultiTransfer(gasPrice, gasLimit uint64, payer *Account, states []*tesra.State, signer *Account) (common.Uint256, error) {
+func (this *Tesra) MultiTransfer(gasPrice, gasLimit uint64, payer *Account, states []*tsr.State, signer *Account) (common.Uint256, error) {
 	tx, err := this.NewMultiTransferTransaction(gasPrice, gasLimit, states)
 	if err != nil {
 		return common.UINT256_EMPTY, err
@@ -198,7 +198,7 @@ func (this *Tesra) MultiTransfer(gasPrice, gasLimit uint64, payer *Account, stat
 }
 
 func (this *Tesra) NewTransferFromTransaction(gasPrice, gasLimit uint64, sender, from, to common.Address, amount uint64) (*types.MutableTransaction, error) {
-	state := &tesra.TransferFrom{
+	state := &tsr.TransferFrom{
 		Sender: sender,
 		From:   from,
 		To:     to,
@@ -209,7 +209,7 @@ func (this *Tesra) NewTransferFromTransaction(gasPrice, gasLimit uint64, sender,
 		gasLimit,
 		TSR_CONTRACT_VERSION,
 		TSR_CONTRACT_ADDRESS,
-		tesra.TRANSFERFROM_NAME,
+		tsr.TRANSFERFROM_NAME,
 		[]interface{}{state},
 	)
 }
@@ -234,7 +234,7 @@ func (this *Tesra) TransferFrom(gasPrice, gasLimit uint64, payer *Account, sende
 }
 
 func (this *Tesra) NewApproveTransaction(gasPrice, gasLimit uint64, from, to common.Address, amount uint64) (*types.MutableTransaction, error) {
-	state := &tesra.State{
+	state := &tsr.State{
 		From:  from,
 		To:    to,
 		Value: amount,
@@ -244,7 +244,7 @@ func (this *Tesra) NewApproveTransaction(gasPrice, gasLimit uint64, from, to com
 		gasLimit,
 		TSR_CONTRACT_VERSION,
 		TSR_CONTRACT_ADDRESS,
-		tesra.APPROVE_NAME,
+		tsr.APPROVE_NAME,
 		[]interface{}{state},
 	)
 }
@@ -276,7 +276,7 @@ func (this *Tesra) Allowance(from, to common.Address) (uint64, error) {
 	preResult, err := this.native.PreExecInvokeNativeContract(
 		TSR_CONTRACT_ADDRESS,
 		TSR_CONTRACT_VERSION,
-		tesra.ALLOWANCE_NAME,
+		tsr.ALLOWANCE_NAME,
 		[]interface{}{&allowanceStruct{From: from, To: to}},
 	)
 	if err != nil {
@@ -293,7 +293,7 @@ func (this *Tesra) Symbol() (string, error) {
 	preResult, err := this.native.PreExecInvokeNativeContract(
 		TSR_CONTRACT_ADDRESS,
 		TSR_CONTRACT_VERSION,
-		tesra.SYMBOL_NAME,
+		tsr.SYMBOL_NAME,
 		[]interface{}{},
 	)
 	if err != nil {
@@ -306,7 +306,7 @@ func (this *Tesra) BalanceOf(address common.Address) (uint64, error) {
 	preResult, err := this.native.PreExecInvokeNativeContract(
 		TSR_CONTRACT_ADDRESS,
 		TSR_CONTRACT_VERSION,
-		tesra.BALANCEOF_NAME,
+		tsr.BALANCEOF_NAME,
 		[]interface{}{address[:]},
 	)
 	if err != nil {
@@ -323,7 +323,7 @@ func (this *Tesra) Name() (string, error) {
 	preResult, err := this.native.PreExecInvokeNativeContract(
 		TSR_CONTRACT_ADDRESS,
 		TSR_CONTRACT_VERSION,
-		tesra.NAME_NAME,
+		tsr.NAME_NAME,
 		[]interface{}{},
 	)
 	if err != nil {
@@ -336,7 +336,7 @@ func (this *Tesra) Decimals() (byte, error) {
 	preResult, err := this.native.PreExecInvokeNativeContract(
 		TSR_CONTRACT_ADDRESS,
 		TSR_CONTRACT_VERSION,
-		tesra.DECIMALS_NAME,
+		tsr.DECIMALS_NAME,
 		[]interface{}{},
 	)
 	if err != nil {
@@ -353,7 +353,7 @@ func (this *Tesra) TotalSupply() (uint64, error) {
 	preResult, err := this.native.PreExecInvokeNativeContract(
 		TSR_CONTRACT_ADDRESS,
 		TSR_CONTRACT_VERSION,
-		tesra.TOTAL_SUPPLY_NAME,
+		tsr.TOTAL_SUPPLY_NAME,
 		[]interface{}{},
 	)
 	if err != nil {
@@ -372,12 +372,12 @@ type Tsg struct {
 }
 
 func (this *Tsg) NewTransferTransaction(gasPrice, gasLimit uint64, from, to common.Address, amount uint64) (*types.MutableTransaction, error) {
-	state := &tesra.State{
+	state := &tsr.State{
 		From:  from,
 		To:    to,
 		Value: amount,
 	}
-	return this.NewMultiTransferTransaction(gasPrice, gasLimit, []*tesra.State{state})
+	return this.NewMultiTransferTransaction(gasPrice, gasLimit, []*tsr.State{state})
 }
 
 func (this *Tsg) Transfer(gasPrice, gasLimit uint64, payer *Account, from *Account, to common.Address, amount uint64) (common.Uint256, error) {
@@ -399,17 +399,17 @@ func (this *Tsg) Transfer(gasPrice, gasLimit uint64, payer *Account, from *Accou
 	return this.tesraSdk.SendTransaction(tx)
 }
 
-func (this *Tsg) NewMultiTransferTransaction(gasPrice, gasLimit uint64, states []*tesra.State) (*types.MutableTransaction, error) {
+func (this *Tsg) NewMultiTransferTransaction(gasPrice, gasLimit uint64, states []*tsr.State) (*types.MutableTransaction, error) {
 	return this.native.NewNativeInvokeTransaction(
 		gasPrice,
 		gasLimit,
 		TSG_CONTRACT_VERSION,
 		TSG_CONTRACT_ADDRESS,
-		tesra.TRANSFER_NAME,
+		tsr.TRANSFER_NAME,
 		[]interface{}{states})
 }
 
-func (this *Tsg) MultiTransfer(gasPrice, gasLimit uint64, states []*tesra.State, signer *Account) (common.Uint256, error) {
+func (this *Tsg) MultiTransfer(gasPrice, gasLimit uint64, states []*tsr.State, signer *Account) (common.Uint256, error) {
 	tx, err := this.NewMultiTransferTransaction(gasPrice, gasLimit, states)
 	if err != nil {
 		return common.UINT256_EMPTY, err
@@ -422,7 +422,7 @@ func (this *Tsg) MultiTransfer(gasPrice, gasLimit uint64, states []*tesra.State,
 }
 
 func (this *Tsg) NewTransferFromTransaction(gasPrice, gasLimit uint64, sender, from, to common.Address, amount uint64) (*types.MutableTransaction, error) {
-	state := &tesra.TransferFrom{
+	state := &tsr.TransferFrom{
 		Sender: sender,
 		From:   from,
 		To:     to,
@@ -433,7 +433,7 @@ func (this *Tsg) NewTransferFromTransaction(gasPrice, gasLimit uint64, sender, f
 		gasLimit,
 		TSG_CONTRACT_VERSION,
 		TSG_CONTRACT_ADDRESS,
-		tesra.TRANSFERFROM_NAME,
+		tsr.TRANSFERFROM_NAME,
 		[]interface{}{state},
 	)
 }
@@ -481,7 +481,7 @@ func (this *Tsg) WithdrawTSG(gasPrice, gasLimit uint64, payer *Account, address 
 }
 
 func (this *Tsg) NewApproveTransaction(gasPrice, gasLimit uint64, from, to common.Address, amount uint64) (*types.MutableTransaction, error) {
-	state := &tesra.State{
+	state := &tsr.State{
 		From:  from,
 		To:    to,
 		Value: amount,
@@ -491,7 +491,7 @@ func (this *Tsg) NewApproveTransaction(gasPrice, gasLimit uint64, from, to commo
 		gasLimit,
 		TSG_CONTRACT_VERSION,
 		TSG_CONTRACT_ADDRESS,
-		tesra.APPROVE_NAME,
+		tsr.APPROVE_NAME,
 		[]interface{}{state},
 	)
 }
@@ -523,7 +523,7 @@ func (this *Tsg) Allowance(from, to common.Address) (uint64, error) {
 	preResult, err := this.native.PreExecInvokeNativeContract(
 		TSG_CONTRACT_ADDRESS,
 		TSG_CONTRACT_VERSION,
-		tesra.ALLOWANCE_NAME,
+		tsr.ALLOWANCE_NAME,
 		[]interface{}{&allowanceStruct{From: from, To: to}},
 	)
 	if err != nil {
@@ -544,7 +544,7 @@ func (this *Tsg) Symbol() (string, error) {
 	preResult, err := this.native.PreExecInvokeNativeContract(
 		TSG_CONTRACT_ADDRESS,
 		TSG_CONTRACT_VERSION,
-		tesra.SYMBOL_NAME,
+		tsr.SYMBOL_NAME,
 		[]interface{}{},
 	)
 	if err != nil {
@@ -557,7 +557,7 @@ func (this *Tsg) BalanceOf(address common.Address) (uint64, error) {
 	preResult, err := this.native.PreExecInvokeNativeContract(
 		TSG_CONTRACT_ADDRESS,
 		TSG_CONTRACT_VERSION,
-		tesra.BALANCEOF_NAME,
+		tsr.BALANCEOF_NAME,
 		[]interface{}{address[:]},
 	)
 	if err != nil {
@@ -574,7 +574,7 @@ func (this *Tsg) Name() (string, error) {
 	preResult, err := this.native.PreExecInvokeNativeContract(
 		TSG_CONTRACT_ADDRESS,
 		TSG_CONTRACT_VERSION,
-		tesra.NAME_NAME,
+		tsr.NAME_NAME,
 		[]interface{}{},
 	)
 	if err != nil {
@@ -587,7 +587,7 @@ func (this *Tsg) Decimals() (byte, error) {
 	preResult, err := this.native.PreExecInvokeNativeContract(
 		TSG_CONTRACT_ADDRESS,
 		TSG_CONTRACT_VERSION,
-		tesra.DECIMALS_NAME,
+		tsr.DECIMALS_NAME,
 		[]interface{}{},
 	)
 	if err != nil {
@@ -604,7 +604,7 @@ func (this *Tsg) TotalSupply() (uint64, error) {
 	preResult, err := this.native.PreExecInvokeNativeContract(
 		TSG_CONTRACT_ADDRESS,
 		TSG_CONTRACT_VERSION,
-		tesra.TOTAL_SUPPLY_NAME,
+		tsr.TOTAL_SUPPLY_NAME,
 		[]interface{}{},
 	)
 	if err != nil {
