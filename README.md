@@ -351,19 +351,19 @@ wa.ExportAccounts(path string, accountDatas []*AccountData, passwds [][]byte, ne
 #### 2.3.1 Get balance
 
 ```
-tesraSdk.Native.Tesra.BalanceOf(address common.Address) (uint64, error)
+tesraSdk.Native.Tsr.BalanceOf(address common.Address) (uint64, error)
 ```
 
 #### 2.3.2 Transfer
 
 ```
-tesraSdk.Native.Tesra.Transfer(gasPrice, gasLimit uint64, from *Account, to common.Address, amount uint64) (common.Uint256, error)
+tesraSdk.Native.Tsr.Transfer(gasPrice, gasLimit uint64, from *Account, to common.Address, amount uint64) (common.Uint256, error)
 ```
 
 #### 2.3.3 Multiple Transfer
 
 ```
-tesraSdk.Native.Tesra.MultiTransfer(gasPrice, gasLimit uint64, states []*tsr.State, signer *Account) (common.Uint256, error)
+tesraSdk.Native.Tsr.MultiTransfer(gasPrice, gasLimit uint64, states []*tsr.State, signer *Account) (common.Uint256, error)
 ```
 
 A multi transfer does more than one transfer of TSR in one transaction.
@@ -371,19 +371,19 @@ A multi transfer does more than one transfer of TSR in one transaction.
 #### 2.3.4 Approve
 
 ```
-tesraSdk.Native.Tesra.Approve(gasPrice, gasLimit uint64, from *Account, to common.Address, amount uint64) (common.Uint256, error)
+tesraSdk.Native.Tsr.Approve(gasPrice, gasLimit uint64, from *Account, to common.Address, amount uint64) (common.Uint256, error)
 ```
 
 #### 2.3.5 Approve Balance
 
 ```
-tesraSdk.Native.Tesra.Allowance(from, to common.Address) (uint64, error)
+tesraSdk.Native.Tsr.Allowance(from, to common.Address) (uint64, error)
 ```
 
 #### 2.3.6 TransferFrom
 
 ```
-tesraSdk.Native.Tesra.TransferFrom(gasPrice, gasLimit uint64, sender *Account, from, to common.Address, amount uint64) (common.Uint256, error)
+tesraSdk.Native.Tsr.TransferFrom(gasPrice, gasLimit uint64, sender *Account, from, to common.Address, amount uint64) (common.Uint256, error)
 ```
 
 ### 2.4 TSG Contract API

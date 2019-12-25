@@ -79,9 +79,9 @@ func TestParseNativeTxPayload(t *testing.T) {
 	for i := 0; i < 1; i++ {
 		transfers = append(transfers, state)
 	}
-	_, err = testTesraSdk.Native.Tesra.NewMultiTransferTransaction(500, 20000, transfers)
+	_, err = testTesraSdk.Native.Tsr.NewMultiTransferTransaction(500, 20000, transfers)
 	assert.Nil(t, err)
-	_, err = testTesraSdk.Native.Tesra.NewTransferFromTransaction(500, 20000, acc.Address, acc.Address, acc.Address, 20)
+	_, err = testTesraSdk.Native.Tsr.NewTransferFromTransaction(500, 20000, acc.Address, acc.Address, acc.Address, 20)
 	assert.Nil(t, err)
 }
 
@@ -237,7 +237,7 @@ func TestTesraSdk_ParseNativeTxPayload2(t *testing.T) {
 
 	acc3, err := NewAccountFromPrivateKey(pri3, signature.SHA256withECDSA)
 	amount := 1000000000
-	txFrom, err := testTesraSdk.Native.Tesra.NewTransferFromTransaction(500, 20000, acc.Address, acc2.Address, acc3.Address, uint64(amount))
+	txFrom, err := testTesraSdk.Native.Tsr.NewTransferFromTransaction(500, 20000, acc.Address, acc2.Address, acc3.Address, uint64(amount))
 	assert.Nil(t, err)
 	tx, err := txFrom.IntoImmutable()
 	assert.Nil(t, err)
@@ -276,7 +276,7 @@ func TestTesraSdk_ParseNativeTxPayload(t *testing.T) {
 	assert.Nil(t, err)
 
 	amount := uint64(1000000000)
-	tx, err := testTesraSdk.Native.Tesra.NewTransferTransaction(500, 20000, acc.Address, acc2.Address, amount)
+	tx, err := testTesraSdk.Native.Tsr.NewTransferTransaction(500, 20000, acc.Address, acc2.Address, amount)
 	assert.Nil(t, err)
 
 	tx2, err := tx.IntoImmutable()
@@ -290,7 +290,7 @@ func TestTesraSdk_ParseNativeTxPayload(t *testing.T) {
 	assert.Equal(t, amount, states[0].Value)
 	assert.Equal(t, "transfer", res["functionName"].(string))
 
-	transferFrom, err := testTesraSdk.Native.Tesra.NewTransferFromTransaction(500, 20000, acc.Address, acc2.Address, acc3.Address, 10)
+	transferFrom, err := testTesraSdk.Native.Tsr.NewTransferFromTransaction(500, 20000, acc.Address, acc2.Address, acc3.Address, 10)
 	transferFrom2, err := transferFrom.IntoImmutable()
 	r, err := ParseNativeTxPayload(transferFrom2.ToArray())
 	assert.Nil(t, err)
@@ -336,7 +336,7 @@ func TestTesraSdk_GenerateMnemonicCodesStr(t *testing.T) {
 		boo := signature.Verify(acc.PublicKey, []byte("test"), si)
 		assert.True(t, boo)
 
-		tx, err := testTesraSdk.Native.Tesra.NewTransferTransaction(0, 0, acc.Address, acc.Address, 10)
+		tx, err := testTesraSdk.Native.Tsr.NewTransferTransaction(0, 0, acc.Address, acc.Address, 10)
 		assert.Nil(t, err)
 		testTesraSdk.SignToTransaction(tx, acc)
 		tx2, err := tx.IntoImmutable()
@@ -388,7 +388,7 @@ func TestTesraSdk_GetTxData(t *testing.T) {
 	testTesraSdk = NewTesraSdk()
 	testWallet, _ = testTesraSdk.OpenWallet("./wallet.dat")
 	acc, _ := testWallet.GetAccountByAddress("AXdmdzbyf3WZKQzRtrNQwAR91ZxMUfhXkt", testPasswd)
-	tx, _ := testTesraSdk.Native.Tesra.NewTransferTransaction(500, 10000, acc.Address, acc.Address, 100)
+	tx, _ := testTesraSdk.Native.Tsr.NewTransferTransaction(500, 10000, acc.Address, acc.Address, 100)
 	testTesraSdk.SignToTransaction(tx, acc)
 	tx2, _ := tx.IntoImmutable()
 	sink := common.NewZeroCopySink(nil)
@@ -449,7 +449,7 @@ func TestTesra_Transfer(t *testing.T) {
 	testTesraSdk = NewTesraSdk()
 	testTesraSdk.NewRpcClient().SetAddress(testNetUrl)
 	testWallet, _ = testTesraSdk.OpenWallet("./wallet.dat")
-	txHash, err := testTesraSdk.Native.Tesra.Transfer(testGasPrice, testGasLimit, nil, testDefAcc, testDefAcc.Address, 1)
+	txHash, err := testTesraSdk.Native.Tsr.Transfer(testGasPrice, testGasLimit, nil, testDefAcc, testDefAcc.Address, 1)
 	if err != nil {
 		t.Errorf("NewTransferTransaction error:%s", err)
 		return
@@ -559,7 +559,7 @@ func TestWsTransfer(t *testing.T) {
 	Init()
 	wsClient := testTesraSdk.ClientMgr.GetWebSocketClient()
 	testTesraSdk.ClientMgr.SetDefaultClient(wsClient)
-	txHash, err := testTesraSdk.Native.Tesra.Transfer(testGasPrice, testGasLimit, nil, testDefAcc, testDefAcc.Address, 1)
+	txHash, err := testTesraSdk.Native.Tsr.Transfer(testGasPrice, testGasLimit, nil, testDefAcc, testDefAcc.Address, 1)
 	if err != nil {
 		t.Errorf("NewTransferTransaction error:%s", err)
 		return

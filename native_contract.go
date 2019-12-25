@@ -64,7 +64,7 @@ type NativeContract struct {
 
 func newNativeContract(tesraSdk *TesraSdk) *NativeContract {
 	native := &NativeContract{tesraSdk: tesraSdk}
-	native.Tesra = &Tesra{native: native, tesraSdk: tesraSdk}
+	Native.Tsr = &Tesra{native: native, tesraSdk: tesraSdk}
 	native.Tsg = &Tsg{native: native, tesraSdk: tesraSdk}
 	native.TsrId = &TsrId{native: native, tesraSdk: tesraSdk}
 	native.GlobalParams = &GlobalParam{native: native, tesraSdk: tesraSdk}
