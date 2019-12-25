@@ -5,5 +5,8 @@
 # vendor
 vendor
 
+# go mod cache
+go.sum
+
 cscope*
 glide.lock
