@@ -1,4 +1,9 @@
+# ide 
+.vscode
+.idea
+
+# vendor
+vendor
+
 cscope*
-vendor/*
 glide.lock
-.idea/
